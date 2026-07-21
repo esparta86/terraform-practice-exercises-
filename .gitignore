@@ -3,6 +3,11 @@ aws/demo-terraform-aws-instance/.terraform/
 demo-terraform-aws-instance/.terraform/*
 
 aws/demo-aws-lambda/nodejs-app/node_modules/*
+aws/demo-aws-lambda/nodeApp.zip
+aws/demo-aws-lambda/myzip/nodeappv2.zip
+
+aws/demo-aws-lambda/tfplan
+
 *.tfstate
 *.tfstate.*git st
 
