@@ -22,8 +22,9 @@ terraform {
 provider "aws" {
 
   region  = var.aws_region
+  profile = "personal"
   assume_role {
-    role_arn     = "arn:aws:iam::734237051973:role/github-role"
+    role_arn = "arn:aws:iam::734237051973:role/github-role"
   }
 }
 
@@ -37,20 +38,22 @@ resource "aws_s3_bucket" "lambda_bucket" {
 
 
 
-data "archive_file" "lambda_nodeapp_archive" {
-  type = "zip"
-  source_dir = "${path.cwd}/nodeApp"
-  output_path = "${path.cwd}/nodeApp.zip"
-}
+# data "archive_file" "lambda_nodeapp_archive" {
+#   type = "zip"
+#   source_dir = "${path.cwd}/nodejs-app"
+#   output_path = "${path.cwd}/nodeApp.zip"
+# }
 
 
 resource "aws_s3_object" "lambda_nodeapp_object" {
   bucket = aws_s3_bucket.lambda_bucket.id
 
-  key = "nodeApp.zip"
-  source = data.archive_file.lambda_nodeapp_archive.output_path
+  key = "lambda-artifacts/nodeapp/nodeAppv2.zip"
+  # source = data.archive_file.lambda_nodeapp_archive.output_path
+  source = "${path.cwd}/myzip/nodeAppv2.zip"
 
-  etag =filemd5(data.archive_file.lambda_nodeapp_archive.output_path)
+  # etag =filemd5(data.archive_file.lambda_nodeapp_archive.output_path)
+  etag = filemd5("${path.cwd}/myzip/nodeAppv2.zip")
 
   depends_on = [
     aws_s3_bucket.lambda_bucket
@@ -65,11 +68,22 @@ resource "aws_lambda_function" "nodeapp" {
 
     runtime = "nodejs16.x"
 
-    handler = "/"
+    handler = "index.handler"
 
-    source_code_hash = data.archive_file.lambda_nodeapp_archive.output_base64sha256
-
+    # source_code_hash = data.archive_file.lambda_nodeapp_archive.output_base64sha256
+    source_code_hash = filebase64sha256("${path.cwd}/myzip/nodeAppv2.zip")
     role = aws_iam_role.lambda_exec.arn
+
+  lifecycle {
+    ignore_changes = [
+      s3_bucket,
+      s3_key,
+      s3_object_version,
+      source_code_hash,
+      last_modified,   # add this too — it's flapping in your plan
+      publish,
+    ]
+  }
 }
 
 
