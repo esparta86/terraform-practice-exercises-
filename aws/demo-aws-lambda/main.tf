@@ -24,7 +24,7 @@ provider "aws" {
   region  = var.aws_region
   profile = "personal"
   assume_role {
-    role_arn = "arn:aws:iam::734237051973:role/RolePowerUserAccess"
+    role_arn = "arn:aws:iam::734237051973:role/github-role"
   }
 }
 
