@@ -69,6 +69,15 @@ jobs:
           cd aws/demo-aws-lambda/functions/${{ matrix.function_key }}
           npm install
 
+      - name: configure aws credentials
+        env:
+          ACTIONS_STEP_DEBUG: true
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{env.oidc-role-arn}}
+          role-session-name: deploysession
+          aws-region: ${{env.AWS_REGION}}
+
     #   - name: Deploy Lambda function
     #     if: ${{ needs.detect-changes.outputs.matrix[matrix.function_key] == 'true' }}
     #     run: |
