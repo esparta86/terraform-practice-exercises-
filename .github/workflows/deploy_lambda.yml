@@ -1,0 +1,46 @@
+name: deploy lambda function
+on:
+  push:
+    branches:
+      - test_actions
+      - main
+
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+            - dev
+            - staging
+            - prod
+
+env:
+  CONFIG_FILE: .github/config/deployment-config.yml
+  oidc-role-arn: "arn:aws:iam::014450374517:role/github-oidc-role"
+  AWS_REGION: "us-east-1"
+  ENVIRONMENT: east
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.filter.outputs.changes }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            nodejs-app-1:            'functions/nodejs-app-1/**'
+            nodejs-app-2:             'functions/nodejs-app-2/**'
