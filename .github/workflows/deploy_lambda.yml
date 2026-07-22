@@ -21,7 +21,7 @@ on:
 
 env:
   CONFIG_FILE: .github/config/deployment-config.yml
-  oidc-role-arn: "arn:aws:iam::734237051973:role/github-oidc-role"
+  oidc-role-arn: "arn:aws:iam::734237051973:role/github-role"
   AWS_REGION: "us-east-1"
   ENVIRONMENT: east
 
