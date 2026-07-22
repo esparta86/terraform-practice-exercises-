@@ -3,7 +3,9 @@ aws/demo-terraform-aws-instance/.terraform/
 demo-terraform-aws-instance/.terraform/*
 
 aws/demo-aws-lambda/nodejs-app/node_modules/*
-aws/demo-aws-lambda-terragrunt/nodeApp/node_modules/*
+aws/demo-aws-lambda-terragrunt/nodejs-app/node_modules/*
+aws/demo-aws-lambda-terragrunt/nodejs-app-2/node_modules/*
+
 aws/demo-aws-lambda/nodeApp.zip
 aws/demo-aws-lambda/myzip/nodeappv2.zip
 
