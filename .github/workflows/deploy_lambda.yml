@@ -5,7 +5,7 @@ on:
       - test_actions
       - main
     paths:
-      - 'functions/**'
+      - 'aws/demo-aws-lambda/functions/**'
 
   workflow_dispatch:
     inputs:
@@ -21,7 +21,7 @@ on:
 
 env:
   CONFIG_FILE: .github/config/deployment-config.yml
-  oidc-role-arn: "arn:aws:iam::014450374517:role/github-oidc-role"
+  oidc-role-arn: "arn:aws:iam::734237051973:role/github-oidc-role"
   AWS_REGION: "us-east-1"
   ENVIRONMENT: east
 
@@ -44,5 +44,5 @@ jobs:
         uses: dorny/paths-filter@v3
         with:
           filters: |
-            nodejs-app-1:            'functions/nodejs-app-1/**'
-            nodejs-app-2:             'functions/nodejs-app-2/**'
+            nodejs-app-1:            'aws/demo-aws-lambda/functions/nodejs-app-1/**'
+            nodejs-app-2:            'aws/demo-aws-lambda/functions/nodejs-app-2/**'
