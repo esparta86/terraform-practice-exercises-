@@ -4,7 +4,7 @@ const serverless = require('serverless-http');
 const app = express();
 
 app.get('/', (req, res) => {
-  res.send('Hello Express version 4! version 2026');
+  res.send('Hello Express version 1! version 2026');
 });
 
 exports.handler = serverless(app);
