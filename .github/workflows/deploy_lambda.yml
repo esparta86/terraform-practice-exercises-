@@ -44,5 +44,34 @@ jobs:
         uses: dorny/paths-filter@v3
         with:
           filters: |
-            nodejs-app-1:            'aws/demo-aws-lambda/functions/nodejs-app-1/**'
+            nodejs-app-1:            'aws/demo-aws-lambda/functions/nodejs-app/**'
             nodejs-app-2:            'aws/demo-aws-lambda/functions/nodejs-app-2/**'
+  deploy:
+    needs: detect-changes
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        function_key: ${{fromJSON(needs.detect-changes.outputs.matrix)}}
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: |
+          cd aws/demo-aws-lambda/functions/${{ matrix.function_key }}
+          npm install
+
+    #   - name: Deploy Lambda function
+    #     if: ${{ needs.detect-changes.outputs.matrix[matrix.function_key] == 'true' }}
+    #     run: |
+    #       cd aws/demo-aws-lambda/functions/${{ matrix.function_key }}
+    #       zip -r ../../nodeApp.zip .
+    #       aws lambda update-function-code --function-name ${{ matrix.function_key }} --zip-file fileb://../../nodeApp.zip --region ${{ env.AWS_REGION }}
